@@ -1,0 +1,211 @@
+爬虫分类:
+
+1. 通用网络爬虫 百度，门户网站
+2. 聚焦网络爬虫 
+3. 增量式网络爬虫
+4. 深层页面爬虫
+
+简单爬虫架构:
+
+1. URL管理器 Universal Resource Location
+2. 网页下载器
+3. 网页解析器
+4. 输出管理器
+
+Python实现网页解析的常用工具
+
+1. 正则表达式 Regular Expression
+2. Lxml库 Xpath语法 
+	HTML XML
+	<div>
+		<p>你好</p>
+	</div>
+3. BeautifulSoup BS
+	
+常见爬虫框架
+ 
+Scrapy 最流行
+Pyspider 国人编写
+Cola  分布式爬虫框架
+
+Http请求的含义
+http://wx3.sinaimg.cn/mw600/00745YaMgy1g0su3o5sp6j30go0go0u8.jpg
+
+web服务流程
+
+发出请求，请求包含3部分
+请求头部
+请求正文
+实体内容
+
+接收响应
+
+常见请求方式
+get
+post
+
+爬取百度logo
+>>> import requests
+>>> response = requests.get('https://www.baidu.com/img/bd_logo1.png')
+>>> with open('logo.png','wb') as logo:
+...     logo.write(response.content)
+...
+	
+response.text
+response.encoding
+response.content
+response.status_code
+
+定制请求头
+>>> headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3514.0 Safari/537.36'}
+>>> url = 'https://www.douban.com'
+>>> response = requests.get(url,headers=headers)
+
+
+https://www.douban.com/search?q=python
+https://www.douban.com/login?username=tom&password=1234
+
+重定向
+>>> r = requests.get('http://www.douban.com')
+>>> r.history
+[<Response [301]>]
+
+设置超时时间
+>>> requests.get('http://www.douban.com',timeout=2)
+<Response [200]>
+
+传递URL参数
+>>> payload={'q':'python','cat':1001}
+>>> r = requests.get('https://www.douban.com/search',params=payload)
+>>> r.url
+'https://www.douban.com/search?q=python&cat=1001'
+	
+Urllib Python标准库
+
+网页解析基础
+
+HTML Hyper Test Markup Language
+XML Extensible Markup Language 可扩展标记语言
+
+<book lang="en" font="Couier New">
+	<name>Spider</name>
+	<author>
+		<firstname></firstname>
+		<lastname></lastname>
+	</author>
+	<price>30.0</price>
+</book>
+
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Example Page</title>
+		<style></style>
+		<script></script>  
+	</head>
+	<body>
+		<div id="images">
+			<a href="image1.html">Name: My Image 1<br><img src="image1.jpg"/></a>
+			<a href="image2.html">Name: My Image 2<br><img src="image2.jpg"/></a>
+			<a href="image3.html">Name: My Image 3<br><img src="image3.jpg"/></a>
+			<a href="image4.html">Name: My Image 4<br><img src="image4.jpg"/></a>
+			<a href="image5.html">Name: My Image 5<br><img src="image5.jpg"/></a>
+		</div>
+	</body>
+</html>
+
+
+
+
+pip install lxml
+
+<div>
+	<ul>
+		<li class="item-0"><a href="link1.html">first item</a></li>
+		<li class="item-1"><a href="link2.html">second item</a></li>
+		<li class="item-inactive"><a href="link3.html">third item</a></li>
+		<li class="item-1"><a href="link4.html">fourth item</a></li>
+		<li class="item-0"><a href="link5.html">fifth item</a></li>
+		<li class="item-0">else item</li>
+		anoter item
+	</ul>
+</div>
+
+Xpath语法
+Element对象
+>>> import requests
+>>> from lxml import etree
+>>> htm='''<div><ul><li class="item-0"><a href="link1.html">first item</a></li><li class="item-1"><a href="link2.html">second item</a></li><li class="item-inactive"><a href="link3.html">third item</a></li><li class="item-1"><a href="link4.html">fourth item</a></li><li class="item-0"><a href="link5.html">fifth item</a></li><li class="item-0">else item</li>anoter item</ul></div>'''
+
+>>> selector = etree.HTML(htm)
+>>> lis = selector.xpath('//div/ul/li')
+
+>>> li1 = selector.xpath('//div/ul/li[1]')
+>>> li1
+[<Element li at 0x1bc747fe288>]
+
+>>> li1_text = selector.xpath('//div/ul/li[1]/a/text()')
+>>> li1_text
+['first item']
+>>> li1_text[0]
+'first item'
+>>> li1_text = selector.xpath('//ul/li[1]/a/text()')[0]
+>>> li1_text
+'first item'
+>>> li1_text = selector.xpath('//li[1]/a/text()')[0]
+
+
+>>> li3_text = selector.xpath('//li[3]/a/text()')[0]
+
+>>> li3_text = selector.xpath('//ul/li[@class="item-inactive"]/a/text()')[0]
+>> li3_text = selector.xpath('//a[@href="link3.html"]/text()')[0]
+>>> li3_text
+'third item'
+
+>>> text = selector.xpath('//a/text()')[0]
+>>> text
+'first item'
+
+>>> text = selector.xpath('//a/text()')
+>>> text
+['first item', 'second item', 'third item', 'fourth item', 'fifth item']
+
+>>> li3_href = selector.xpath('//ul/li[3]/a/@href')
+>>> li3_href
+['link3.html']
+>
+>> classes = selector.xpath('//li/@class')
+>>> classes
+['item-0', 'item-1', 'item-inactive', 'item-1', 'item-0', 'item-0']
+
+>>> lis = selector.xpath('//li[starts-with(@class,"item-")]')
+>>> lis
+[<Element li at 0x1bc747fe288>, <Element li at 0x1bc747fe248>, <Element li at 0x1bc747fe348>, <Element li at 0x1bc747fe388>, <Element li at 0x1bc747fe3c8>, <Element li at 0x1bc747fe448>]
+>>> lis = selector.xpath('//li[starts-with(@class,"item-")]')
+
+
+
+爬取百度首页
+>>> import requests
+>>> from lxml import etree
+>>> response = requests.get('https://www.baidu.com')
+>>> response.encoding
+'ISO-8859-1'
+>>> response.encoding='utf-8'
+>>> selector = etree.HTML(response.text)
+>>> selector.xpath('//*[@id="u1"]/a[1]/text()')[0]
+'新闻'
+>>> url = selector.xpath('//*[@id="u1"]/a[1]/@href')[0]
+>>> url
+'http://news.baidu.com'
+>>>
+
+
+
+
+
+
+https://xa.58.com/house.shtml?PGTID=0d100000-001e-3a9c-cc8e-b519cd3bf272&ClickID=2
+	
+	
+	

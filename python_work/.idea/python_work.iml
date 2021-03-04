@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/web_selenium" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/web_selenium/unitest" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/web_selenium/autotest project/driver" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/py接口" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/appium_test/appiumpractice" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/blbl" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/venv1" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.7 (pycharm_env_py37)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="TestRunnerService">
+    <option name="PROJECT_TEST_RUNNER" value="Unittests" />
+  </component>
+</module>
